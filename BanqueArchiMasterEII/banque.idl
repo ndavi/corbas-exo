@@ -1,0 +1,9 @@
+module banque {
+    interface Compte {
+        attribute string titulaire;
+        readonly attribute float solde;
+        boolean crediter(in float somme);
+        boolean debiter(in float somme);
+        string infosCompte();
+    };
+};
