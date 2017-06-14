@@ -42,8 +42,56 @@ public class AppliClient {
         init(args);
         searchItems();
 
-        Boolean compteReady = false;
         System.out.println("Bonjour ! Bienvenue sur l'application de retrait de compte distribuée.");
+
+        getClientInfos();
+
+        Boolean wantContinue = true;
+        while (wantContinue) {
+            System.out.println("Selectionnez l'action à executer");
+            System.out.print("1 : Retirer ; 2 : Déposer ; 3 : " +
+                    "Solde du compte ; 4 Changer de compte/distributeur ; 5 : Quitter : ");
+            String userInput = scanner.nextLine();
+            Integer somme;
+            switch(userInput) {
+                case "1":
+                    System.out.print("Sélectionnez une somme : ");
+                    somme = scanner.nextInt();
+                    selectedDistributeur.debiter(selectedCompte, somme);
+                    System.out.println("Retrait de " + somme);
+                    break;
+                case "2":
+                    if(!selectedDistributeur.canCrediter()) {
+                        System.out.println("Il n'est pas possible de déposer de l'argent dans ce distributeur");
+                        break;
+                    }
+                    System.out.print("Sélectionnez une somme : ");
+                    somme = scanner.nextInt();
+                    System.out.println("Credit de " + somme);
+                    selectedDistributeur.crediter(selectedCompte, somme);
+                    break;
+                case "3":
+                    System.out.println("Solde du compte : " + selectedCompte.infosCompte());
+                    break;
+                case "4":
+                    selectedCompte = null;
+                    selectedDistributeur = null;
+                    getClientInfos();
+                    break;
+                case "5":
+                    System.out.println("Aurevoir");
+                    wantContinue = false;
+                    break;
+                default:
+                    System.out.println("Selection incorrecte");
+
+            }
+
+        }
+    }
+
+    public void getClientInfos() {
+        Boolean compteReady = false;
         while (!compteReady) {
             System.out.println("Veuillez choisir un compte bancaire parmis les comptes disponibles : ");
             for (Compte compte : comptes) {
@@ -66,7 +114,11 @@ public class AppliClient {
         while (!distributeurReady) {
             System.out.println("Veuillez choisir un distributeur parmis les distributeurs disponibles : ");
             for (Distributeur d : distributeurs) {
-                System.out.println(d.modeleDistributeur() + " ");
+                String credit = "";
+                if(!d.canCrediter()) {
+                    credit = "(Il n'est pas possible de déposer de l'argent dans ce distributeur)";
+                }
+                System.out.println(d.modeleDistributeur() + " " + credit);
             }
             System.out.print("Nom du distributeur : ");
             String userInput = scanner.nextLine();
@@ -78,34 +130,8 @@ public class AppliClient {
                 System.out.println("Distributeur trouvé");
                 distributeurReady = true;
             } else {
-                System.out.println("Ce compte n'existe pas");
+                System.out.println("Ce distributeur n'existe pas");
             }
-        }
-
-        Boolean wantContinue = true;
-        while (wantContinue) {
-            System.out.println("Selectionnez l'action à faire ?");
-            System.out.print("1 : Retirer ; 2 : Déposer ; 3 : Solde du compte : ");
-            Integer userInput = scanner.nextInt();
-            Integer somme;
-            switch(userInput) {
-                case 1:
-                    System.out.println("Sélectionnez une somme : ");
-                    somme = scanner.nextInt();
-                    selectedDistributeur.debiter(selectedCompte, somme);
-                    System.out.println("Retrait de " + somme);
-                    break;
-                case 2:
-                    System.out.println("Sélectionnez une somme : ");
-                    somme = scanner.nextInt();
-                    System.out.println("Credit de " + somme);
-                    selectedDistributeur.crediter(selectedCompte, somme);
-                    break;
-                case 3:
-                    System.out.println("Solde du compte : " + selectedCompte.infosCompte());
-                    break;
-            }
-
         }
     }
 

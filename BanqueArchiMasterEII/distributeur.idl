@@ -1,7 +1,7 @@
 module commerces {
     interface Distributeur {
         attribute string modeleDistributeur;
-        readonly attribute float solde;
+        attribute boolean canCrediter;
         boolean crediter(in Object compte, in long somme);
         boolean debiter(in Object compte, in long somme);
         string infosDistributeur();

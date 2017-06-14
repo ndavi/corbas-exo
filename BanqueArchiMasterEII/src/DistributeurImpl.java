@@ -8,9 +8,11 @@ import org.omg.CORBA.Object;
 public class DistributeurImpl extends DistributeurPOA {
 
     private String modeleDistributeur;
+    private Boolean canCrediter;
 
-    public DistributeurImpl(String modeleDistributeur) {
+    public DistributeurImpl(String modeleDistributeur, Boolean canCrediter) {
         this.modeleDistributeur = modeleDistributeur;
+        this.canCrediter = canCrediter;
     }
 
     @Override
@@ -24,9 +26,15 @@ public class DistributeurImpl extends DistributeurPOA {
     }
 
     @Override
-    public float solde() {
-        return 0;
+    public boolean canCrediter() {
+        return this.canCrediter;
     }
+
+    @Override
+    public void canCrediter(boolean newCanCrediter) {
+        this.canCrediter = newCanCrediter;
+    }
+
 
     @Override
     public boolean crediter(Object compte, int somme) {

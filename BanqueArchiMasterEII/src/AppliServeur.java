@@ -43,7 +43,10 @@ public class AppliServeur {
             createCompte("Jean");
             createCompte("Paul");
 
-            createDistributeur("Villeurbanne");
+            createDistributeur("Villeurbanne",true);
+            createDistributeur("Lyon 1",false);
+            createDistributeur("Lyon 5",false);
+
             // attendre les invocations des clients
             orb.run();
 
@@ -53,13 +56,9 @@ public class AppliServeur {
         }
     }
 
-    private static void createComptes(ORB orb, POA rootpoa) {
 
-    }
-
-    private void createDistributeur(String name) throws InvalidName, ServantNotActive, WrongPolicy, org.omg.CosNaming.NamingContextPackage.InvalidName, NotFound, CannotProceed {
-        DistributeurImpl distributeur = new DistributeurImpl(name);
-
+    private void createDistributeur(String name, Boolean canCrediter) throws InvalidName, ServantNotActive, WrongPolicy, org.omg.CosNaming.NamingContextPackage.InvalidName, NotFound, CannotProceed {
+        DistributeurImpl distributeur = new DistributeurImpl(name,canCrediter);
         org.omg.CORBA.Object ref = rootpoa.servant_to_reference(distributeur);
         Distributeur href = DistributeurHelper.narrow(ref);
         // obtenir la reference du contexte de nommage
